@@ -1,0 +1,15 @@
+---
+- name: Install Reviewboard needed dependencies
+  apt: pkg={{item}}
+  with_items:
+      - python-setuptools
+      - python-dev
+      - memcached
+      - python-memcached
+      - patch
+      - python-mysqldb
+      - python-psycopg2
+      - git-core
+
+- name: Install Reviewboard
+  easy_install: name=ReviewBoard
