@@ -1,6 +1,29 @@
 - hosts: all
   user: vagrant
   sudo: yes
+  vars:
+    # Configure this
+    admin_user: admin_test
+    admin_password: qwerty
+    admin_email: example@example.org
+    domain_name: vagrant.reviewboard
+
+    # Should be oke
+    db_type: postgresql
+    db_name: reviewboard
+    db_user: u_reviewboard
+    db_password: 7jfbdsrgbc
+    db_host: localhost
+
+    web_server: apache
+    web_server_port: 80
+
+    cache_type: file
+    cache_info: /tmp/cache.reviewboard
+
+    site_root: /opt/reviewboard
+    python_loader: wsgi
+
   roles:
     - common
     - postgres

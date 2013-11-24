@@ -5,11 +5,41 @@
       - python-setuptools
       - python-dev
       - memcached
-      - python-memcached
       - patch
       - python-mysqldb
       - python-psycopg2
       - git-core
+      - apache2
 
 - name: Install Reviewboard
-  easy_install: name=ReviewBoard
+  easy_install: name={{item}}
+  with_items:
+    - ReviewBoard
+    - pip
+
+- name: install various libraries with pip
+  action: pip name={{item}} state=present
+  with_items:
+    - python-memcached
+    - virtualenv
+    - supervisor
+    - uwsgi
+
+- name: run reviewboard installer
+  sudo: yes
+  command: rb-site install {{site_root}}
+         --noinput
+         --domain-name={{domain_name}}
+         --db-type={{db_type}}
+         --db-name={{db_name}}
+         --db-host={{db_host}}
+         --db-user={{db_user}}
+         --db-pass={{db_password}}
+         --cache-type={{cache_type}}
+         --cache-info={{cache_info}}
+         --python-loader={{python_loader}}
+         --admin-user={{admin_user}}
+         --admin-password={{admin_password}}
+         --admin-email={{admin_email}}
+         --web-server-type={{web_server}}
+         creates={{site_root}}
