@@ -10,6 +10,7 @@
       - python-psycopg2
       - git-core
       - apache2
+      - libapache2-mod-wsgi
 
 - name: Install Reviewboard
   easy_install: name={{item}}
@@ -23,7 +24,6 @@
     - python-memcached
     - virtualenv
     - supervisor
-    - uwsgi
 
 - name: run reviewboard installer
   sudo: yes
@@ -42,15 +42,24 @@
          --admin-password={{admin_password}}
          --admin-email={{admin_email}}
          --web-server-type={{web_server}}
+         --web-server-type={{web_server_port}}
          creates={{site_root}}
 
 - name: Configure Apache
-  copy: src=/opt/reviewboard/conf/apache-wsgi.conf
-        dest=/etc/apache2/sites-available/reviewboard.conf
+  command: cp {{site_root}}/conf/apache-wsgi.conf /etc/apache2/sites-available/reviewboard
+    creates=/etc/apache2/sites-available/reviewboard
+
+- lineinfile: dest=/etc/apache2/ports.conf line="Listen {{web_server_port}}"
+- file: path={{site_root}}/data owner=www-data group=www-data mode=0775
+- file: path={{site_root}}/htdocs/media/ext owner=www-data group=www-data mode=0775
 
 - name: enable Site
   sudo: yes
   command: a2ensite reviewboard
+
+- name: enable mod_wsgi
+  sudo: yes
+  command: a2enmod wsgi
 
 - name: restart Apache
   service: name=apache2 state=restarted
