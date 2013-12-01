@@ -43,3 +43,14 @@
          --admin-email={{admin_email}}
          --web-server-type={{web_server}}
          creates={{site_root}}
+
+- name: Configure Apache
+  copy: src=/opt/reviewboard/conf/apache-wsgi.conf
+        dest=/etc/apache2/sites-available/reviewboard.conf
+
+- name: enable Site
+  sudo: yes
+  command: a2ensite reviewboard
+
+- name: restart Apache
+  service: name=apache2 state=restarted

@@ -16,7 +16,7 @@
     db_host: localhost
 
     web_server: apache
-    web_server_port: 80
+    web_server_port: 8080
 
     cache_type: file
     cache_info: /tmp/cache.reviewboard
