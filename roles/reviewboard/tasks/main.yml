@@ -42,7 +42,7 @@
          --admin-password={{admin_password}}
          --admin-email={{admin_email}}
          --web-server-type={{web_server}}
-         --web-server-type={{web_server_port}}
+         --web-server-port={{web_server_port}}
          creates={{site_root}}
 
 - name: Configure Apache
